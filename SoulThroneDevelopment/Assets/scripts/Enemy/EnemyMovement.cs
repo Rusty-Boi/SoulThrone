@@ -9,8 +9,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Transform[] patrolWaypointsArray;
     private Queue<Transform> patrolWaypoints;
     private Transform currentWaypoint;
+    public Animator animator;
+    private float currSpeed;
 
-    public Vector2 lastPos, currPos;
+    public Vector2 lastPos, currPos, movementDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -22,14 +24,14 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        movementDirection = (currentWaypoint.position - transform.position).normalized;
     }
 
     void FixedUpdate()
     {
 
         Patrol();
-        
+        Animate();
     }
 
     void Patrol()
@@ -41,6 +43,15 @@ public class EnemyMovement : MonoBehaviour
         {
             patrolWaypoints.Enqueue(currentWaypoint);
             currentWaypoint = patrolWaypoints.Dequeue();
+        }
+    }
+
+    void Animate()
+    {
+        if(movementDirection != Vector2.zero)
+        {
+            animator.SetFloat("Horizontal", movementDirection.x);
+            animator.SetFloat("Vertical", movementDirection.y);
         }
     }
 }
