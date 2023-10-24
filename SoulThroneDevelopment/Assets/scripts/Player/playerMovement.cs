@@ -10,6 +10,7 @@ public class playerMovement : MonoBehaviour
     private float x, y;
     private Vector2 playerDirection;
     public Animator animator;
+    private float currentSpeed;
 
     void Start()
     {
@@ -34,16 +35,22 @@ public class playerMovement : MonoBehaviour
         y = Input.GetAxisRaw("Vertical");
 
         playerDirection = new Vector2(x, y).normalized;
+        currentSpeed = rb.velocity.magnitude;
     }
 
     void Movement()
     {
         rb.velocity = new Vector2(playerDirection.x * movementSpeed, playerDirection.y * movementSpeed);
+        
     }
 
     void Animate()
     {
-        animator.SetFloat("Horizontal", playerDirection.x);
-        animator.SetFloat("Vertical", playerDirection.y);
+        if(playerDirection != Vector2.zero)
+        {
+            animator.SetFloat("Horizontal", x);
+            animator.SetFloat("Vertical", y);
+        }
+        animator.SetFloat("speed", currentSpeed);
     }
 }
